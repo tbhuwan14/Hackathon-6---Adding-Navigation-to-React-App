@@ -1,33 +1,59 @@
-import React, { Component, useState, useLocation } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "../components/Home.js";
-import About from "../components/About.js";
-import Nav from "../components/Nav";
-import NoMatch from "../components/NoMatch";
+import React, { Component, useState } from "react";
 import "../styles/App.css";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  DefaultRoute,
+  Link,
+  useLocation,
+} from "react-router-dom";
 
 class App extends Component {
   render() {
     return (
-      <Router>
-        <Switch>
-          <div id="main">
-            <Nav />
-            <LocationDisplay />
-            <Route path="/" exact component={Home} />
-            <Route path="/about" exact component={About} />
-            <Route path="*" exact component={NoMatch} />
-          </div>
-        </Switch>
-      </Router>
+      <div id="main">
+        <Router>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+            </ul>
+          </nav>
+          <Switch>
+            <Route exact path="/about">
+              <About />
+            </Route>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route>
+              <NoMatch />
+            </Route>
+          </Switch>
+          <LocationDisplay />
+        </Router>
+      </div>
     );
   }
 }
+export function LocationDisplay() {
+  const loc = useLocation();
+  return <h6 data-testid="location-display">{loc.pathname}</h6>;
+}
+export function NoMatch() {
+  return <h2>No match</h2>;
+}
+export function Home() {
+  return <h2>You are home</h2>;
+}
 
-// export function LocationDisplay() {
-//   const { pathname } = useLocation();
-//   console.log(pathname);
-//   return <div data-testid="location-display">{pathname}</div>;
-// }
+export function About() {
+  return <h2>You are on the about page</h2>;
+}
 
 export default App;
